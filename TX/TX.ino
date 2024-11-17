@@ -35,7 +35,7 @@ void setup() {
   Serial.begin(115200);
   
   //Inicializar LoRa
-  /*LoRa.setPins(ss, rst, dio0);
+  LoRa.setPins(ss, rst, dio0);
   
   //Frecuencia de operación de LoRa
   while (!LoRa.begin(433E6)) {
@@ -51,7 +51,7 @@ void setup() {
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
   scale.set_scale(CALIBRATION_FACTOR); 
   scale.tare();
-  Serial.println("HX711 OK!");*/
+  Serial.println("HX711 OK!");
   //Inicializar DHT
   dht1.begin();
   Serial.println("DHT1 OK!");
@@ -60,14 +60,14 @@ void setup() {
 }
 
 void loop() {
-  /*//Código HX711
+  //Código HX711
   //Leer peso
   scale.power_up();
   //peso=round(scale.get_units()); con la galga se descomenta
   peso=random(10000); //comentar si se usa la galga
   Serial.print("Peso: ");
   Serial.println(peso);
-  scale.power_down();*/
+  scale.power_down();
   //Código DHT
   //Leer temperatura y humedad
   float h1 = dht1.readHumidity();
@@ -93,12 +93,19 @@ void loop() {
   Serial.print(h2);
   Serial.print(F("%  Temperatura Externa: "));
   Serial.println(t2);
-  /*//Código LoRa
+  //Código LoRa
   //Enviar paquete
   LoRa.beginPacket();
   LoRa.print(peso);
   LoRa.print("/");
+  LoRa.print(t1);
+  LoRa.print("/");
+  LoRa.print(h1);
+  LoRa.print("/");
+  LoRa.print(t2);
+  LoRa.print("/");
+  LoRa.print(h2);
+  LoRa.print("/");
   LoRa.endPacket();
-  counter++;*/
   delay(10000);
 }
