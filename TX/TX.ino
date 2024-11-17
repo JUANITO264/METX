@@ -58,6 +58,8 @@ void loop() {
   //Enviar paquete
   LoRa.beginPacket();
   LoRa.print(peso);
+  LoRa.print("/");
+  
   LoRa.endPacket();
   counter++;
   delay(10000);
