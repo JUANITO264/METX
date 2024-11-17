@@ -12,9 +12,12 @@
 const int LOADCELL_DOUT_PIN = 22;
 const int LOADCELL_SCK_PIN = 21;
 
+//Variables
+int peso;
+
 int counter = 0;
 
-//Creae objeto HX711
+//Crea objeto HX711
 HX711 scale;
 
 void setup() {
@@ -22,16 +25,16 @@ void setup() {
   Serial.begin(115200);
   
   //Inicializar LoRa
-  //LoRa.setPins(ss, rst, dio0);
+  LoRa.setPins(ss, rst, dio0);
   
   //Frecuencia de operación de LoRa
-  /*while (!LoRa.begin(433E6)) {
+  while (!LoRa.begin(433E6)) {
     Serial.println(".");
     delay(500);
-  }*/
+  }
   //Sincronización de palabra de LoRa
-  //LoRa.setSyncWord(0xF3);
-  //Serial.println("LoRa Initializing OK!");
+  LoRa.setSyncWord(0xF3);
+  Serial.println("LoRa Initializing OK!");
 
   //Inicializar HX711
   setCpuFrequencyMhz(80); 
@@ -42,20 +45,20 @@ void setup() {
 }
 
 void loop() {
-  //Código LoRa
-  //Enviar paquete
-  /*LoRa.beginPacket();
-  LoRa.print("hello ");
-  LoRa.print(counter);
-  LoRa.endPacket();*/
-  counter++;
-  //Código HX711
+    //Código HX711
   //Leer peso
-  Serial.print("\t| average:\t");
-  Serial.println(scale.get_units(10), 5);
+  //peso=round(scale.get_units()); con la galga se descomenta
+  peso=random(10000); //comentar si se usa la galga
+  Serial.print("Peso: ");
+  Serial.println(peso);
   scale.power_down();
   delay(5000);
   scale.power_up();
-
-  //delay(10000);
+  //Código LoRa
+  //Enviar paquete
+  LoRa.beginPacket();
+  LoRa.print(peso);
+  LoRa.endPacket();
+  counter++;
+  delay(10000);
 }
