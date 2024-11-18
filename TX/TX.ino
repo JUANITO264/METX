@@ -10,21 +10,27 @@
 #define dio0 2
 
 //Definir pines de HX711
-const int LOADCELL_DOUT_PIN = 22;
-const int LOADCELL_SCK_PIN = 21;
+const int LOADCELL_DOUT_PIN = 21;
+const int LOADCELL_SCK_PIN = 22;
 
 //Definir pines de DHT
 #define DHT1PIN 32
 #define DHT2PIN 33
+
 //Definir tipo de DHT
 #define DHTTYPE DHT22 
+
+//Definir pines de KY-037
+#define sonin 25
+#define sonout 26
+
 //Variables
 int peso;
-
+int sonidoin;
+int sonidoout;
 
 //Crea objeto HX711
 HX711 scale;
-#define CALIBRATION_FACTOR -471.497
 
 //Crea objeto DHT
 DHT dht1(DHT1PIN, DHTTYPE);
@@ -49,7 +55,7 @@ void setup() {
   //Inicializar HX711
   setCpuFrequencyMhz(80); 
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
-  scale.set_scale(CALIBRATION_FACTOR); 
+  scale.set_scale(); 
   scale.tare();
   Serial.println("HX711 OK!");
   //Inicializar DHT
@@ -57,14 +63,18 @@ void setup() {
   Serial.println("DHT1 OK!");
   dht2.begin();
   Serial.println("DHT2 OK!");
+  //Inicializar KY-037
+  pinMode(sonin, INPUT);
+  pinMode(sonout, OUTPUT);
+  Serial.println("KY-037 OK!");
 }
 
 void loop() {
   //Código HX711
   //Leer peso
   scale.power_up();
-  //peso=round(scale.get_units()); con la galga se descomenta
-  peso=random(10000); //comentar si se usa la galga
+  peso=scale.get_units(10);
+  peso*=1000./1008604.;
   Serial.print("Peso: ");
   Serial.println(peso);
   scale.power_down();
@@ -93,6 +103,16 @@ void loop() {
   Serial.print(h2);
   Serial.print(F("%  Temperatura Externa: "));
   Serial.println(t2);
+  //Código KY-037
+  //Leer sonido
+  //sonidoin = analogRead(sonin); con el micrófono se descomenta
+  sonidoin = random(4096); //comentar si se usa el micrófono
+  Serial.print("Sonido Interno: ");
+  Serial.println(sonidoin);
+  //sonidoout = analogRead(sonout); con el micrófono se descomenta
+  sonidoout = random(4096); //comentar si se usa el micrófono
+  Serial.print("Sonido Externo: ");
+  Serial.println(sonidoout);
   //Código LoRa
   //Enviar paquete
   LoRa.beginPacket();
@@ -106,6 +126,9 @@ void loop() {
   LoRa.print("/");
   LoRa.print(h2);
   LoRa.print("/");
+  LoRa.print(sonidoin/40.96);
+  LoRa.print("/");
+  LoRa.print(sonidoout/40.96);
   LoRa.endPacket();
   delay(10000);
 }
