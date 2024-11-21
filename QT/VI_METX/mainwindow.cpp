@@ -18,10 +18,10 @@ MainWindow::MainWindow(QWidget *parent)
     //
     mDatabase = QSqlDatabase::addDatabase("QMYSQL");
     mDatabase.setHostName("localhost");
-    mDatabase.setDatabaseName(""); // nombre de la base
+    mDatabase.setDatabaseName("apiario1"); // nombre de la base
     mDatabase.setPort(3306);    // puerto en donde esta
-    mDatabase.setUserName(""); // usuario
-    mDatabase.setPassword(""); // contraseña
+    mDatabase.setUserName("JUANCHO"); // usuario
+    mDatabase.setPassword("12345"); // contraseña
 
     if (!mDatabase.open()){
         QMessageBox::critical(this, "ERROR", mDatabase.lastError().text());
