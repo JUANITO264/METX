@@ -1,132 +1,107 @@
-let chart;
+// URLs de los endpoints PHP
+const apiEndpoint = "fetch_data.php";
 
-document.addEventListener('DOMContentLoaded', function() {
-    initChart();
-    updateData();
-    
-    // Actualizar datos cada 10 segundos
-    setInterval(updateData, 10000);
-});
+// Variables para gráficas
+let tempChart, humChart, pesoChart, soundChart;
 
-function initChart() {
-    const ctx = document.getElementById('sensorChart').getContext('2d');
-    chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [
-                {
-                    label: 'Temperatura Interna (°C)',
-                    borderColor: '#FF6B6B',
-                    data: []
-                },
-                {
-                    label: 'Temperatura Externa (°C)',
-                    borderColor: '#4ECDC4',
-                    data: []
-                },
-                {
-                    label: 'Humedad Interna (%)',
-                    borderColor: '#45B7D1',
-                    data: []
-                },
-                {
-                    label: 'Humedad Externa (%)',
-                    borderColor: '#96CEB4',
-                    data: []
-                },
-                {
-                    label: 'Peso (kg)',
-                    borderColor: '#FFBE0B',
-                    data: []
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'hour'
-                    }
-                },
-                y: {
-                    beginAtZero: true
-                }
+// Función para actualizar dashboards con los últimos datos
+async function updateDashboard() {
+    try {
+        const response = await fetch(apiEndpoint);
+        const data = await response.json();
+
+        // Actualiza datos en los dashboards
+        document.getElementById("tempInt").textContent = data.temperatura_interna;
+        document.getElementById("tempExt").textContent = data.temperatura_externa;
+        document.getElementById("humInt").textContent = data.humedad_interna;
+        document.getElementById("humExt").textContent = data.humedad_externa;
+        document.getElementById("weight").textContent = data.peso;
+        document.getElementById("soundInt").textContent = data.sonido_interno;
+        document.getElementById("soundExt").textContent = data.sonido_externo;
+
+        // Actualiza las últimas mediciones
+        const lastUpdate = new Date(data.fecha).toLocaleString();
+        document.getElementById("lastUpdateTemp").textContent = lastUpdate;
+        document.getElementById("lastUpdateHum").textContent = lastUpdate;
+        document.getElementById("lastUpdateWeight").textContent = lastUpdate;
+        document.getElementById("lastUpdateSound").textContent = lastUpdate;
+
+    } catch (error) {
+        console.error("Error al actualizar el dashboard:", error);
+    }
+}
+
+// Función para inicializar las gráficas
+async function initCharts() {
+    try {
+        const response = await fetch(apiEndpoint + "?historico=true");
+        const data = await response.json();
+
+        const labels = data.map(item => new Date(item.fecha).toLocaleTimeString());
+
+        // Temperatura
+        const tempDataInt = data.map(item => item.temperatura_interna);
+        const tempDataExt = data.map(item => item.temperatura_externa);
+        tempChart = new Chart(document.getElementById("tempInternaChart"), {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: "Interna", data: tempDataInt, borderColor: "red", fill: false },
+                    { label: "Externa", data: tempDataExt, borderColor: "orange", fill: false }
+                ]
             }
-        }
-    });
+        });
+
+        // Humedad
+        const humDataInt = data.map(item => item.humedad_interna);
+        const humDataExt = data.map(item => item.humedad_externa);
+        humChart = new Chart(document.getElementById("humExternaChart"), {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: "Interna", data: humDataInt, borderColor: "blue", fill: false },
+                    { label: "Externa", data: humDataExt, borderColor: "cyan", fill: false }
+                ]
+            }
+        });
+
+        // Peso
+        const pesoData = data.map(item => item.peso);
+        pesoChart = new Chart(document.getElementById("pesoChart"), {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{ label: "Peso", data: pesoData, borderColor: "green", fill: false }]
+            }
+        });
+
+        // Sonido
+        const soundDataInt = data.map(item => item.sonido_interno);
+        const soundDataExt = data.map(item => item.sonido_externo);
+        soundChart = new Chart(document.getElementById("soundInternoChart"), {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: "Interno", data: soundDataInt, borderColor: "purple", fill: false },
+                    { label: "Externo", data: soundDataExt, borderColor: "magenta", fill: false }
+                ]
+            }
+        });
+
+    } catch (error) {
+        console.error("Error al inicializar las gráficas:", error);
+    }
 }
 
-function updateData() {
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
+// Actualiza los dashboards y gráficas periódicamente
+setInterval(updateDashboard, 60000); // Actualiza cada minuto
+setInterval(initCharts, 60000); // Actualiza gráficas cada minuto
 
-    fetch(`getData.php?start=${startDate}&end=${endDate}`)
-        .then(response => response.json())
-        .then(data => {
-            updateDashboard(data[data.length - 1]);
-            updateChart(data);
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-function formatDateTime(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-}
-// xdin
-function updateDashboard(latestData) {
-    document.getElementById('tempInt').textContent = latestData.temp_interna.toFixed(1);
-    document.getElementById('tempExt').textContent = latestData.temp_externa.toFixed(1);
-    document.getElementById('humInt').textContent = latestData.hum_interna.toFixed(1);
-    document.getElementById('humExt').textContent = latestData.hum_externa.toFixed(1);
-    document.getElementById('weight').textContent = latestData.peso.toFixed(2);
-    document.getElementById('soundInt').textContent = latestData.sonido_interno.toFixed(1);
-    document.getElementById('soundExt').textContent = latestData.sonido_externo.toFixed(1);
-    // Formatear y actualizar las fechas de última medición
-    const formattedDateTime = formatDateTime(latestData.fecha);
-    
-    // Actualizar los indicadores de última medición
-    const updateElements = ['Temp', 'Hum', 'Weight', 'Sound'];
-    updateElements.forEach(elem => {
-        const element = document.getElementById(`lastUpdate${elem}`);
-        element.textContent = formattedDateTime;
-        
-        // Agregar y remover clase para animación
-        element.classList.add('data-updated');
-        setTimeout(() => {
-            element.classList.remove('data-updated');
-        }, 1000);
-    });
-}
-
-function updateChart(data) {
-    chart.data.labels = data.map(row => row.fecha);
-    chart.data.datasets[0].data = data.map(row => row.temp_interna);
-    chart.data.datasets[1].data = data.map(row => row.temp_externa);
-    chart.data.datasets[2].data = data.map(row => row.hum_interna);
-    chart.data.datasets[3].data = data.map(row => row.hum_externa);
-    chart.data.datasets[4].data = data.map(row => row.peso);
-    chart.update();
-}
-
-// Opcional: Agregar una función para actualizar automáticamente
-function startAutoUpdate() {
-    updateData();
-    setInterval(updateData, 10000); // Actualizar cada 10 segundos
-}
-
-// Iniciar la actualización automática cuando se carga la página
-document.addEventListener('DOMContentLoaded', function() {
-    initChart();
-    startAutoUpdate();
+// Inicializa todo al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+    updateDashboard();
+    initCharts();
 });

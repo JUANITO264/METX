@@ -1,17 +1,29 @@
 <?php
-// 1. Configuración de la conexión
-$host = 'localhost';     // Servidor de la base de datos
-$db   = 'JUANCHOO';   // Nombre de la base de datos
-$user = 'root';    // Usuario de MariaDB
-$pass = 'root'; // Contraseña de MariaDB
+header('Content-Type: application/json');
 
-// 2. Conexión a la base de datos
-$conexion = mysqli_connect($host, $user, $pass, $db);
+// Configuración de la base de datos
+$host = 'localhost';
+$dbname = 'nombre_de_tu_base_de_datos';
+$username = 'tu_usuario';
+$password = 'tu_contraseña';
 
-// 3. Verificar la conexión
-if (!$conexion) {
-    die("La conexión falló: " . mysqli_connect_error());
+try {
+    // Conexión a la base de datos
+    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Consulta SQL para obtener los últimos 10 datos
+    $sql = "SELECT fecha, temperatura_interna, temperatura_externa, humedad_interna, humedad_externa, peso, sonido_interno, sonido_externo 
+            FROM datos_sensor 
+            ORDER BY fecha DESC 
+            LIMIT 10";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    // Devuelve los datos en formato JSON
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($result);
+} catch (PDOException $e) {
+    echo json_encode(['error' => $e->getMessage()]);
 }
-echo "Conexión exitosa";
-
 ?>
