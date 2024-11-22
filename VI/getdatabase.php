@@ -1,9 +1,9 @@
 <?php
 // 1. Configuración de la conexión
 $host = 'localhost';     // Servidor de la base de datos
-$db   = 'colmena_db';   // Nombre de la base de datos
-$user = 'tu_usuario';    // Usuario de MariaDB
-$pass = 'tu_contraseña'; // Contraseña de MariaDB
+$db   = 'JUANCHOO';   // Nombre de la base de datos
+$user = 'root';    // Usuario de MariaDB
+$pass = 'root'; // Contraseña de MariaDB
 $charset = 'utf8mb4';    // Codificación de caracteres
 
 // 2. Creación del DSN (Data Source Name)
