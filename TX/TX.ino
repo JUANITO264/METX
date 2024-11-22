@@ -74,7 +74,7 @@ void loop() {
   //Leer peso
   scale.power_up();
   peso=scale.get_units(10);
-  peso*=1000./1008604.;
+  peso*=-1000./1008604.;
   Serial.print("Peso: ");
   Serial.println(peso);
   scale.power_down();
@@ -120,9 +120,9 @@ void loop() {
   LoRa.print("/");
   LoRa.print(t1);
   LoRa.print("/");
-  LoRa.print(h1);
-  LoRa.print("/");
   LoRa.print(t2);
+  LoRa.print("/");
+  LoRa.print(h1);
   LoRa.print("/");
   LoRa.print(h2);
   LoRa.print("/");
@@ -130,5 +130,5 @@ void loop() {
   LoRa.print("/");
   LoRa.print(sonidoout/40.96);
   LoRa.endPacket();
-  delay(10000);
+  delay(60000);
 }

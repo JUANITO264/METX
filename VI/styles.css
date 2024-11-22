@@ -44,7 +44,7 @@ header h1 {
     border: 2px solid var(--primary-color);
 }
 
-.card h3 {
+.card h3, .chart-card h3 {
     margin: 0 0 15px 0;
     color: #8B4513;
     text-align: center;
