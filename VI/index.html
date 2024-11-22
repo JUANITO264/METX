@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitor de Colmena</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="colmena.png">
     <link rel="stylesheet" href="styles.css">
-    
 </head>
 <body>
     <div class="container">
@@ -18,11 +18,11 @@
                 <div class="sensor-data">
                     <div class="sensor-item">
                         <span>Interna:</span>
-                        <span id="tempInt">--</span>°C
+                        <span id="Tempin">--</span>°C
                     </div>
                     <div class="sensor-item">
                         <span>Externa:</span>
-                        <span id="tempExt">--</span>°C
+                        <span id="Tempout">--</span>°C
                     </div>
                 </div>
                 <div class="latest-data-indicator">
@@ -35,11 +35,11 @@
                 <div class="sensor-data">
                     <div class="sensor-item">
                         <span>Interna:</span>
-                        <span id="humInt">--</span>%
+                        <span id="Humin">--</span>%
                     </div>
                     <div class="sensor-item">
                         <span>Externa:</span>
-                        <span id="humExt">--</span>%
+                        <span id="Humout">--</span>%
                     </div>
                 </div>
                 <div class="latest-data-indicator">
@@ -51,7 +51,7 @@
                 <h3>Peso</h3>
                 <div class="sensor-data">
                     <div class="sensor-item">
-                        <span id="weight">--</span>kg
+                        <span id="Peso">--</span>kg
                     </div>
                 </div>
                 <div class="latest-data-indicator">
@@ -64,11 +64,11 @@
                 <div class="sensor-data">
                     <div class="sensor-item">
                         <span>Interno:</span>
-                        <span id="soundInt">--</span>%
+                        <span id="Sonin">--</span>%
                     </div>
                     <div class="sensor-item">
                         <span>Externo:</span>
-                        <span id="soundExt">--</span>%
+                        <span id="Sonout">--</span>%
                     </div>
                 </div>
                 <div class="latest-data-indicator">
@@ -98,6 +98,10 @@
             </div>
         </div>
     </div>
-    <script src="logic.js"></script>
+    <!-- <script src="bootstrap.min.js"></script> -->
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+        <script src="logic.js"></script>
 </body>
 </html>
