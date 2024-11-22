@@ -4,27 +4,14 @@ $host = 'localhost';     // Servidor de la base de datos
 $db   = 'JUANCHOO';   // Nombre de la base de datos
 $user = 'root';    // Usuario de MariaDB
 $pass = 'root'; // Contraseña de MariaDB
-$charset = 'utf8mb4';    // Codificación de caracteres
 
-// 2. Creación del DSN (Data Source Name)
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+// 2. Conexión a la base de datos
+$conexion = mysqli_connect($host, $user, $pass, $db);
 
-// 3. Opciones de configuración para PDO
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,    // Manejo de errores
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,         // Formato de resultados
-    PDO::ATTR_EMULATE_PREPARES   => false,                    // Preparación de consultas
-];
-
-// 4. Establecer la conexión
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-    // Si llegas aquí, la conexión fue exitosa
-    
-    // El resto del código que usa la conexión...
-
-} catch (\PDOException $e) {
-    // Si hay un error en la conexión, se captura aquí
-    echo json_encode(['error' => $e->getMessage()]);
+// 3. Verificar la conexión
+if (!$conexion) {
+    die("La conexión falló: " . mysqli_connect_error());
 }
+echo "Conexión exitosa";
+
 ?>

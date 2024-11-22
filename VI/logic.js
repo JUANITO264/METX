@@ -72,6 +72,18 @@ function updateData() {
         .catch(error => console.error('Error:', error));
 }
 
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+// xdin
 function updateDashboard(latestData) {
     document.getElementById('tempInt').textContent = latestData.temp_interna.toFixed(1);
     document.getElementById('tempExt').textContent = latestData.temp_externa.toFixed(1);
@@ -80,6 +92,21 @@ function updateDashboard(latestData) {
     document.getElementById('weight').textContent = latestData.peso.toFixed(2);
     document.getElementById('soundInt').textContent = latestData.sonido_interno.toFixed(1);
     document.getElementById('soundExt').textContent = latestData.sonido_externo.toFixed(1);
+    // Formatear y actualizar las fechas de última medición
+    const formattedDateTime = formatDateTime(latestData.fecha);
+    
+    // Actualizar los indicadores de última medición
+    const updateElements = ['Temp', 'Hum', 'Weight', 'Sound'];
+    updateElements.forEach(elem => {
+        const element = document.getElementById(`lastUpdate${elem}`);
+        element.textContent = formattedDateTime;
+        
+        // Agregar y remover clase para animación
+        element.classList.add('data-updated');
+        setTimeout(() => {
+            element.classList.remove('data-updated');
+        }, 1000);
+    });
 }
 
 function updateChart(data) {
@@ -91,3 +118,15 @@ function updateChart(data) {
     chart.data.datasets[4].data = data.map(row => row.peso);
     chart.update();
 }
+
+// Opcional: Agregar una función para actualizar automáticamente
+function startAutoUpdate() {
+    updateData();
+    setInterval(updateData, 10000); // Actualizar cada 10 segundos
+}
+
+// Iniciar la actualización automática cuando se carga la página
+document.addEventListener('DOMContentLoaded', function() {
+    initChart();
+    startAutoUpdate();
+});

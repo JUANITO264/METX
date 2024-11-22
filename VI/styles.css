@@ -80,23 +80,27 @@ header h1 {
     margin-top: 20px;
 }
 
-input[type="date"] {
-    padding: 8px;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
+.latest-data-indicator {
+    text-align: center;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #FFD700;
 }
 
-button {
-    padding: 8px 20px;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    border: none;
-    border-radius: 5px;
-    color: #8B4513;
-    cursor: pointer;
+.latest-data-indicator span {
     font-weight: bold;
-    transition: transform 0.2s;
+    color: #8B4513;
 }
 
-button:hover {
-    transform: scale(1.05);
+/* Opcional: Agregar una animación cuando se actualizan los datos */
+@keyframes highlight {
+    0% { color: #8B4513; }
+    50% { color: #FFD700; }
+    100% { color: #8B4513; }
+}
+
+.data-updated {
+    animation: highlight 1s ease-in-out;
 }
