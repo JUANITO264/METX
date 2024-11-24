@@ -65,7 +65,7 @@ void setup() {
   Serial.println("DHT2 OK!");
   //Inicializar KY-037
   pinMode(sonin, INPUT);
-  pinMode(sonout, OUTPUT);
+  pinMode(sonout, INPUT);
   Serial.println("KY-037 OK!");
 }
 
