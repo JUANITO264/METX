@@ -27,7 +27,7 @@ void setup() {
     delay(500);
   }
   //Sincronización de palabra
-  LoRa.setSyncWord(0xF3);
+  LoRa.setSyncWord(0xD2);
   Serial.println("LoRa Initializing OK!");
   //Inicializar WiFi
   WiFi.begin(ssid, password);
@@ -59,7 +59,7 @@ void loop() {
     Serial.println(LoRa.packetRssi());
     // Enviar datos a PHP
     HTTPClient http;
-    http.begin("http://192.168.63.204/insert_LoRa.php?data="+ LoRaData);
+    http.begin("http://192.168.231.204/insert_LoRa.php?data="+ LoRaData);
     int httpCode = http.GET();
     if(httpCode > 0) {
       if(httpCode == HTTP_CODE_OK) {

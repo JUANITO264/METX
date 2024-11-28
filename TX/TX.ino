@@ -49,7 +49,7 @@ void setup() {
     delay(500);
   }
   //Sincronización de palabra de LoRa
-  LoRa.setSyncWord(0xF3);
+  LoRa.setSyncWord(0xD2);
   Serial.println("LoRa OK!");
 
   //Inicializar HX711
@@ -74,7 +74,7 @@ void loop() {
   //Leer peso
   scale.power_up();
   peso=scale.get_units(10);
-  peso*=-1000./1008604.;
+  peso*=1000./1008604.;
   Serial.print("Peso: ");
   Serial.println(peso);
   scale.power_down();
@@ -105,12 +105,12 @@ void loop() {
   Serial.println(t2);
   //Código KY-037
   //Leer sonido
-  //sonidoin = analogRead(sonin); con el micrófono se descomenta
-  sonidoin = random(4096); //comentar si se usa el micrófono
+  sonidoin = analogRead(sonin);
+  //sonidoin = random(4096); //comentar si se usa el micrófono
   Serial.print("Sonido Interno: ");
   Serial.println(sonidoin);
-  //sonidoout = analogRead(sonout); con el micrófono se descomenta
-  sonidoout = random(4096); //comentar si se usa el micrófono
+  sonidoout = analogRead(sonout);
+  //sonidoout = random(4096); //comentar si se usa el micrófono
   Serial.print("Sonido Externo: ");
   Serial.println(sonidoout);
   //Código LoRa
