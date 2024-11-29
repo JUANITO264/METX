@@ -251,30 +251,36 @@ async function updateDashboard() {
 }
 
 // Función para actualizar los indicadores de estado
-function updateStatusIndicators(data) {
+async function updateStatusIndicators() {
+    const response = await fetch(apiEndpoint);
+    const data = await response.json();
     // Temperatura
+    try{
     const tempStatus = document.getElementById("tempStatus");
-    if (data.Tempin < 35) {
-        tempStatus.textContent = "La temperatura interna es correcta";
+    if (data.Tempin < 38 && data.Tempin > 34) {
+        tempStatus.textContent = "La temperatura interna está dentro del rango";
         tempStatus.className = "status-indicator status-correct";
-    } else {
-        tempStatus.textContent = "La temperatura interna es incorrecta";
+    }else if (data.Tempin == data.Tempout) {
+        tempStatus.textContent = "Colmena no Termoregulada";
+        tempStatus.className = "status-indicator status-incorrect";
+    }else {
+        tempStatus.textContent = "La temperatura interna está fuera del rango";
         tempStatus.className = "status-indicator status-incorrect";
     }
 
     // Humedad
     const humStatus = document.getElementById("humStatus");
-    if (data.Humin < 75) {
-        humStatus.textContent = "La humedad interna es correcta";
+    if (data.Humin < 65 && data.Humin > 40) {
+        humStatus.textContent = "La humedad interna está en rangos aceptables";
         humStatus.className = "status-indicator status-correct";
     } else {
-        humStatus.textContent = "La humedad interna es incorrecta";
+        humStatus.textContent = "La humedad interna está fuera del rango";
         humStatus.className = "status-indicator status-incorrect";
     }
 
     // Peso
     const weightStatus = document.getElementById("weightStatus");
-    if (data.Peso > 200) {
+    if (data.Peso > 800) {
         weightStatus.textContent = "El peso total de miel es recolectable";
         weightStatus.className = "status-indicator status-correct";
     } else {
@@ -286,6 +292,9 @@ function updateStatusIndicators(data) {
     const soundStatus = document.getElementById("soundStatus");
     soundStatus.textContent = `El sonido interno es ${data.Sonin}`;
     soundStatus.className = "status-indicator";
+} catch (error) {
+    console.error("Error al actualizar los indicadores de estado:", error);
+}
 }
 
 
@@ -293,9 +302,11 @@ function updateStatusIndicators(data) {
 setInterval(updateDashboard, 60000); // Actualiza cada minuto
 setInterval(initializeCharts, 60000); // Actualiza gráficas cada minuto
 setInterval(updateCharts, 60000); // Actualiza gráficas cada minuto
+setInterval(updateStatusIndicators, 60000); // Actualiza indicadores de estado cada minuto
 // Inicializa todo al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
     updateDashboard();
     initializeCharts();
     updateCharts();
+    updateStatusIndicators();
 });
