@@ -220,6 +220,74 @@ async function updateCharts() {
     }
 }
 
+// Función para actualizar dashboards con los últimos datos
+async function updateDashboard() {
+    try {
+        const response = await fetch(apiEndpoint);
+        const data = await response.json();
+
+        // Actualiza datos en los dashboards
+        document.getElementById("Tempin").textContent = data.Tempin;
+        document.getElementById("Tempout").textContent = data.Tempout;
+        document.getElementById("Humin").textContent = data.Humin;
+        document.getElementById("Humout").textContent = data.Humout;
+        document.getElementById("Peso").textContent = data.Peso;
+        document.getElementById("Sonin").textContent = data.Sonin;
+        document.getElementById("Sonout").textContent = data.Sonout;
+
+        // Actualiza las últimas mediciones
+        const lastUpdate = new Date(data.fecha).toLocaleString();
+        document.getElementById("lastUpdateTemp").textContent = data.Fecha;
+        document.getElementById("lastUpdateHum").textContent = data.Fecha;
+        document.getElementById("lastUpdateWeight").textContent = data.Fecha;
+        document.getElementById("lastUpdateSound").textContent = data.Fecha;
+
+        // Actualiza los indicadores de estado
+        updateStatusIndicators(data);
+
+    } catch (error) {
+        console.error("Error al actualizar el dashboard:", error);
+    }
+}
+
+// Función para actualizar los indicadores de estado
+function updateStatusIndicators(data) {
+    // Temperatura
+    const tempStatus = document.getElementById("tempStatus");
+    if (data.Tempin < 35) {
+        tempStatus.textContent = "La temperatura interna es correcta";
+        tempStatus.className = "status-indicator status-correct";
+    } else {
+        tempStatus.textContent = "La temperatura interna es incorrecta";
+        tempStatus.className = "status-indicator status-incorrect";
+    }
+
+    // Humedad
+    const humStatus = document.getElementById("humStatus");
+    if (data.Humin < 75) {
+        humStatus.textContent = "La humedad interna es correcta";
+        humStatus.className = "status-indicator status-correct";
+    } else {
+        humStatus.textContent = "La humedad interna es incorrecta";
+        humStatus.className = "status-indicator status-incorrect";
+    }
+
+    // Peso
+    const weightStatus = document.getElementById("weightStatus");
+    if (data.Peso > 200) {
+        weightStatus.textContent = "El peso total de miel es recolectable";
+        weightStatus.className = "status-indicator status-correct";
+    } else {
+        weightStatus.textContent = "El peso total de miel no es recolectable";
+        weightStatus.className = "status-indicator status-incorrect";
+    }
+
+    // Sonido
+    const soundStatus = document.getElementById("soundStatus");
+    soundStatus.textContent = `El sonido interno es ${data.Sonin}`;
+    soundStatus.className = "status-indicator";
+}
+
 
 // Actualiza los dashboards y gráficas periódicamente
 setInterval(updateDashboard, 60000); // Actualiza cada minuto

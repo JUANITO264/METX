@@ -143,5 +143,20 @@ body {
     height: auto;
 }
 
+.status-indicator {
+    text-align: center;
+    font-size: 1em;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.status-correct {
+    color: green;
+}
+
+.status-incorrect {
+    color: red;
+}
 
 /* Resto de los estilos anteriores se mantienen igual */
