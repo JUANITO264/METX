@@ -27,7 +27,7 @@ void setup() {
     delay(500);
   }
   //Sincronización de palabra
-  LoRa.setSyncWord(0xD2);
+  LoRa.setSyncWord(0xF3);
   Serial.println("LoRa Initializing OK!");
   //Inicializar WiFi
   WiFi.begin(ssid, password);

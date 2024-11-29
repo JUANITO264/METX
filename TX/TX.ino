@@ -49,7 +49,7 @@ void setup() {
     delay(500);
   }
   //Sincronización de palabra de LoRa
-  LoRa.setSyncWord(0xD2);
+  LoRa.setSyncWord(0xF3);
   Serial.println("LoRa OK!");
 
   //Inicializar HX711
@@ -117,17 +117,17 @@ void loop() {
   //Enviar paquete
   LoRa.beginPacket();
   LoRa.print(peso);
-  LoRa.print("/");
+  LoRa.print("_");
   LoRa.print(t1);
-  LoRa.print("/");
+  LoRa.print("_");
   LoRa.print(t2);
-  LoRa.print("/");
+  LoRa.print("_");
   LoRa.print(h1);
-  LoRa.print("/");
+  LoRa.print("_");
   LoRa.print(h2);
-  LoRa.print("/");
+  LoRa.print("_");
   LoRa.print(sonidoin/40.96);
-  LoRa.print("/");
+  LoRa.print("_");
   LoRa.print(sonidoout/40.96);
   LoRa.endPacket();
   delay(60000);
