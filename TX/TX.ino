@@ -21,8 +21,8 @@ const int LOADCELL_SCK_PIN = 22;
 #define DHTTYPE DHT22 
 
 //Definir pines de KY-037
-#define sonin 25
-#define sonout 26
+#define sonin 26
+#define sonout 25
 
 //Variables
 int peso;
@@ -106,11 +106,9 @@ void loop() {
   //Código KY-037
   //Leer sonido
   sonidoin = analogRead(sonin);
-  //sonidoin = random(4096); //comentar si se usa el micrófono
   Serial.print("Sonido Interno: ");
   Serial.println(sonidoin);
   sonidoout = analogRead(sonout);
-  //sonidoout = random(4096); //comentar si se usa el micrófono
   Serial.print("Sonido Externo: ");
   Serial.println(sonidoout);
   //Código LoRa

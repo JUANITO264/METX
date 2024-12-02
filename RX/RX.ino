@@ -67,7 +67,7 @@ void loop() {
       } else {
         Serial.printf("HTTP GET... code: %d\n", httpCode);
       }
-    } else {
+    } else {  
       Serial.printf("HTTP GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
     http.end();
